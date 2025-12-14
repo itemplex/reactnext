@@ -1,22 +1,68 @@
-# 리액트, Next.js로 완성하는 프론트엔드
-![Image](https://github.com/user-attachments/assets/ab3abd5f-a4fb-4310-bb0e-8c0fdf9b4fcb)
-
-- 저자: 강경석
-- 출간: 2025년 10월 20일
-- 정가: 36,000원
-- 페이지: 592
-
 
 ## 책 소개
 
 > 현명한 프론트엔드 개발자로 가는 실무서!
+```aiignore
+npm install -D eslint@^9
+rm -rf node_modules package-lock.json
+npm install
+npm ci
+npm run build
 
-이 책은 단순히 리액트와 Next.js를 사용하는 법을 설명하는 것이 아닙니다.
-실제 서비스를 만드는 프론트엔드 개발자의 시선에서, ‘어떻게 구성하고’, ‘왜 이렇게 설계하는지’에 대한 이유와 기준을 함께 제시합니다.
 
-컴포넌트와 훅의 구조화, 서버/클라이언트 컴포넌트 분리, fetch 전략, 타입 안정성 확보, 메타데이터 구성, 번역 처리, 캐싱 전략, 데이터 페칭 등 실무에서 부딪히는 이슈들을 단순 기능이 아닌 “판단 가능한 설계”로 발전시키는 길을 보여줍니다.
+# /etc/httpd/conf.d/reactnext.conf
+<VirtualHost *:80>
+    ServerName www.reactnext.com
+    Redirect permanent / https://www.reactnext.com/
+</VirtualHost>
 
-총 14장으로 구성된 이 책은 크게 세 가지 파트로 전개됩니다.
+<VirtualHost *:443>
+    ServerName www.reactnext.com
+    DocumentRoot /home/reactnext/public_html
+
+    SSLEngine on
+    SSLCertificateFile     /etc/nginx/ssl/www.reactnext.com.crt
+    SSLCertificateKeyFile  /etc/nginx/ssl/www.reactnext.com.key
+
+    <Directory "/home/reactnext/public_html">
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    # PHP-FPM 연동 (필요한 소켓/포트로 수정)
+    <FilesMatch "\.php$">
+ SetHandler "proxy:unix:/run/php8.3-fpm-apache.sock|fcgi://localhost/"
+    </FilesMatch>
+
+    # /trade 이하를 Next.js로 프록시
+    # ProxyPass        /trade http://127.0.0.1:3001/trade
+    # ProxyPassReverse /trade http://127.0.0.1:3001/trade
+
+
+    ErrorLog  /var/log/httpd/reactnext-error.log
+    CustomLog /var/log/httpd/reactnext-access.log combined
+</VirtualHost>
+
+
+public_html/.htaccess                                                                                                           ~                              
+
+RewriteEngine On
+
+# 기존 파일/디렉터리 있으면 그대로
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# /trade 이하를 Next.js로 프록시
+RewriteRule ^trade/(.*)$ http://127.0.0.1:3001/trade/$1 [P,L]
+
+# 프록시 헤더(선택)
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-For %{REMOTE_ADDR}s
+
+
+
+```
 > 1-6장: 프론트엔드 개발의 기초
 프론트엔드 개발자로서 반드시 이해하고 넘어가야 할 언어적 기초와 핵심 개념들을 다룹니다.
 JavaScript와 TypeScript의 주요 개념은 물론, 리액트의 컴포넌트 구조, 상태 관리, 렌더링 방식 등
