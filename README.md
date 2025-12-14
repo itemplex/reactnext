@@ -3,12 +3,43 @@
 
 > 현명한 프론트엔드 개발자로 가는 실무서!
 ```aiignore
+# httpd 설치
+dnf install -y httpd mod_ssl 
+ 
+# /etc/hosts
+127.0.0.1 www.reactnext.com
+
 npm install -D eslint@^9
 rm -rf node_modules package-lock.json
 npm install
 npm ci
 npm run build
 
+# /etc/opt/remi/php83/php-fpm.d/www83-apache.conf
+[php83-apache]
+user = nobody
+group = nobody
+;listen = 127.0.0.1:9000
+
+;listen.allowed_clients = 127.0.0.1
+
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+
+slowlog = /var/log/php-fpm/www-slow.log
+
+security.limit_extensions = .php .html .htm
+
+listen.owner = apache
+listen.group = apache
+listen.mode = 0660
+
+listen = /run/php8.3-fpm-apache.sock
+
+# systemctl restart php83-php-fpm
 
 # /etc/httpd/conf.d/reactnext.conf
 <VirtualHost *:80>
@@ -44,7 +75,7 @@ npm run build
 </VirtualHost>
 
 
-public_html/.htaccess                                                                                                           ~                              
+# public_html/.htaccess                                                                                                           ~                              
 
 RewriteEngine On
 
