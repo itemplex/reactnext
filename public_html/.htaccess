@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# 기존 파일/디렉터리 있으면 그대로
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# /trade 이하를 Next.js로 프록시
+RewriteRule ^trade/(.*)$ http://127.0.0.1:3001/trade/$1 [P,L]
+
+# 프록시 헤더(선택)
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-For %{REMOTE_ADDR}s
