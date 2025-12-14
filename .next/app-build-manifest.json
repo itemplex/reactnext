@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/trade/aion2/game-money/page": [
+    "/trade/aion2/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/trade/aion2/game-money/page.js"
+      "static/chunks/app/trade/aion2/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,10 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/trade/aion2/page": [
+    "/trade/aion2/game-money/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/trade/aion2/page.js"
+      "static/chunks/app/trade/aion2/game-money/page.js"
     ]
   }
 }
