@@ -1,5 +1,6 @@
 <?php
 // Simple PHP session auth for Next.js frontend
+require_once __DIR__ . '/../session_bootstrap.php';
 session_start();
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -31,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     respond([
         'authenticated' => $user !== null,
         'user' => $user,
+        'session_id' => session_id(),
     ]);
 }
 
@@ -44,10 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $input['password'] ?? '';
 
     if ($username === 'test' && $password === 'test') {
+        session_regenerate_id(true);
         $_SESSION['user'] = $username;
         respond([
             'authenticated' => true,
             'user' => $username,
+            'session_id' => session_id(),
         ]);
     }
 
@@ -58,9 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    session_destroy();
+    session_regenerate_id(true);
+    $_SESSION = [];
     respond([
         'authenticated' => false,
+        'session_id' => session_id(),
     ]);
 }
 

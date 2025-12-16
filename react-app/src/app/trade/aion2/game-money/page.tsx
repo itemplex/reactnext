@@ -40,6 +40,7 @@ export default function GameMoneyPage() {
           onLogout={logout}
           logoutPending={logoutPending}
           redirectHref="/index.php"
+          showSessionId
         />
       </div>
 

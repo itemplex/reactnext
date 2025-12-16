@@ -78,6 +78,9 @@ export default function LoginPage() {
           ) : session?.authenticated ? (
             <div className="space-y-3 text-center">
               <div className="text-lg font-semibold">{session.user} 님 로그인됨</div>
+              {session.session_id && (
+                <div className="text-xs text-slate-500">세션 ID: {session.session_id}</div>
+              )}
               <Button variant="outline" onClick={handleLogout} disabled={busy}>
                 {busy ? "로그아웃 중..." : "로그아웃"}
               </Button>

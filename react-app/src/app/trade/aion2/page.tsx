@@ -18,6 +18,7 @@ export default function Aion2IndexPage() {
           onLogout={logout}
           logoutPending={logoutPending}
           redirectHref="/index.php"
+          showSessionId
         />
       </div>
       <ul className="list-disc pl-5 space-y-2">

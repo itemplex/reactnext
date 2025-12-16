@@ -43,7 +43,12 @@ const fetchJson = async (url: string, init?: RequestInit) => {
   return data;
 };
 
-export type SessionResponse = { authenticated: boolean; user?: string; error?: string };
+export type SessionResponse = {
+  authenticated: boolean;
+  user?: string;
+  session_id?: string;
+  error?: string;
+};
 
 export async function fetchEcho() {
   if (shouldAllowInsecure && typeof window === "undefined") {

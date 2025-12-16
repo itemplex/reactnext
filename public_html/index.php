@@ -1,21 +1,26 @@
 <?php
+require_once __DIR__ . '/session_bootstrap.php';
 session_start();
 
 $loginError = '';
 
 // Handle logout
 if (isset($_GET['logout'])) {
+    // Invalidate current session ID and data
+    session_regenerate_id(true);
+    $_SESSION = [];
     session_destroy();
     header('Location: index.php');
     exit;
 }
-
 // Handle login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
     if ($username === 'test' && $password === 'test') {
+        session_regenerate_id(true);
         $_SESSION['user'] = $username;
         header('Location: index.php');
         exit;
@@ -48,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="card">
     <?php if (!empty($_SESSION['user'])): ?>
         <div class="welcome">
-            <h1>환영합니다, <?= htmlspecialchars($_SESSION['user']); ?>님</h1>
+            <h1>세션 ID: <?= htmlspecialchars(session_id()); ?></h1>
+            <h2>환영합니다, <?= htmlspecialchars($_SESSION['user']); ?>님</h2>
+            <a class="" href="/trade/aion2">아이온2 가기</a>
             <a class="logout" href="?logout=1">로그아웃</a>
         </div>
     <?php else: ?>
