@@ -1,13 +1,21 @@
 RewriteEngine On
+RewriteBase /
 
 # 기존 파일/디렉터리 있으면 그대로
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# /trade 이하를 Next.js로 프록시
-RewriteRule ^trade/(.*)$ http://127.0.0.1:3001/trade/$1 [P,L]
+# Next 정적 자산(_next) 프록시
+# HMR(WebSocket) 미사용: webpack-hmr은 410 응답으로 차단
+RewriteRule ^_next/webpack-hmr - [R=410,L]
+RewriteRule ^_next/(.*)$ http://127.0.0.1:3001/_next/$1 [P,QSA,L]
 
-# 프록시 헤더(선택)
+# /trade 또는 /trade/... 은 Next.js(127.0.0.1:3001)로 프록시
+RewriteRule ^trade$ http://127.0.0.1:3001/trade [P,QSA,L]
+RewriteRule ^trade/(.*)$ http://127.0.0.1:3001/trade/$1 [P,QSA,L]
+
+# 프록시 헤더
 RequestHeader set X-Forwarded-Proto "https"
-RequestHeader set X-Forwarded-For %{REMOTE_ADDR}s
+RequestHeader set X-Forwarded-For "%{REMOTE_ADDR}s"
+RequestHeader set X-Forwarded-Host "%{HTTP_HOST}s"

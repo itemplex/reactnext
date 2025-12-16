@@ -12,6 +12,9 @@ export default function Home() {
         <Link href="/favorite">
           <Button>즐겨찾기</Button>
         </Link>
+        <Link href="/login">
+          <Button variant="outline">로그인</Button>
+        </Link>
       </div>
     </main>
   );
